@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Markup.Xaml;
 
 namespace SukiUI.Controls
@@ -23,23 +22,17 @@ namespace SukiUI.Controls
 			AvaloniaXamlLoader.Load(this);
 		}
 
-		private double _value = 50;
-
 		public double Value
 		{
-			get => _value;
-			set
-			{
-				_value = (int)(value * 3.6);
-				SetValue(ValueProperty, _value);
-			}
+			get { return GetValue(ValueProperty); }
+			set { SetValue(ValueProperty, value); }
 		}
 
 		/// <summary>
 		/// Defines the <see cref="Value"/> property.
 		/// </summary>
 		public static readonly StyledProperty<double> ValueProperty =
-			AvaloniaProperty.Register<CircleProgressBar, double>(nameof(Value), defaultValue: 50, coerce: (o, d) => d * 3.6);
+			AvaloniaProperty.Register<CircleProgressBar, double>(nameof(Value), defaultValue: 0, coerce: (o, d) => d * 3.6);
 
 		public static readonly StyledProperty<double> StrokeWidthProperty =
 		AvaloniaProperty.Register<CircleProgressBar, double>(nameof(StrokeWidth), defaultValue: 10);
