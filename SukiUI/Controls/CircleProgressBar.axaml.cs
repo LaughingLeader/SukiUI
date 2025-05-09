@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 
 namespace SukiUI.Controls
 {
@@ -50,6 +51,22 @@ namespace SukiUI.Controls
         {
             get => GetValue(IsIndeterminateProperty);
             set => SetValue(IsIndeterminateProperty, value);
+        }
+
+        public static readonly StyledProperty<IBrush> ArcBackgroundProperty = AvaloniaProperty.Register<CircleProgressBar, IBrush>(nameof(ArcBackground), Brushes.Blue);
+
+        public IBrush ArcBackground
+        {
+            get => GetValue(ArcBackgroundProperty);
+            set => SetValue(ArcBackgroundProperty, value);
+        }
+
+        public static readonly StyledProperty<IBrush> ArcForegroundProperty = AvaloniaProperty.Register<CircleProgressBar, IBrush>(nameof(ArcForeground), Brushes.Black);
+
+        public IBrush ArcForeground
+        {
+            get => GetValue(ArcForegroundProperty);
+            set => SetValue(ArcForegroundProperty, value);
         }
     }
 }

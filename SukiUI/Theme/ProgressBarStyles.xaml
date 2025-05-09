@@ -230,4 +230,8 @@
         <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor75}" />
     </Style>
 
+    <Style Selector="suki|CircleProgressBar">
+        <Setter Property="ArcBackground" Value="{DynamicResource SukiLightBorderBrush}" />
+        <Setter Property="ArcForeground" Value="{DynamicResource SukiPrimaryColor}" />
+    </Style>
 </Styles>
