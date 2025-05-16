@@ -1,65 +1,43 @@
-using System;
+
+﻿using System;
+using System.Text;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
+using Avalonia.Layout;
+using Avalonia.Media;
+using Avalonia.Platform;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Material.Icons;
 using SukiUI.Dialogs;
+using SukiUI.MessageBox;
 using SukiUI.Toasts;
+using System.Text;
+using SukiUI.Controls;
 
 namespace SukiUI.Demo.Features.ControlsLibrary.Dialogs;
 
 public partial class DialogsViewModel(ISukiDialogManager dialogManager, ISukiToastManager toastManager) : DemoPageBase("Dialogs", MaterialIconKind.Forum)
 {
+    private readonly ISukiDialogManager _dialogManager = dialogManager;
+
     public NotificationType[] NotificationTypes { get; } = Enum.GetValues<NotificationType>();
-    
+
     [ObservableProperty] private NotificationType _selectedType;
-    
-    [RelayCommand]
-    private void OpenStandardDialog()
-    {
-        dialogManager.CreateDialog()
-            .WithTitle("A Standard Dialog")
-            .WithContent("This is a standard dialog. Click the button below to dismiss.")
-            .WithActionButton("Dismiss", _ => { }, true)
-            .TryShow();
-    }
 
-    [RelayCommand]
-    private void OpenLongDialog()
-    {
-        var listbox = new ListBox
-        {
-            ItemsSource = Enumerable.Range(0, 1000)
-        };
-        dialogManager.CreateDialog()
-            .WithTitle("A Long Dialog with a ListBox")
-            .WithContent(listbox)
-            .WithActionButton("Dismiss", _ => { }, true)
-            .TryShow();
-    }
+    public SukiMessageBoxIcons[] MessageBoxIcons { get; } = Enum.GetValues<SukiMessageBoxIcons>();
 
-    [RelayCommand]
-    private void OpenBackgroundCloseDialog()
-    {
-        dialogManager.CreateDialog()
-            .WithTitle("Background Closing Dialog")
-            .WithContent("Dismiss this dialog by clicking anywhere outside of it.")
-            .Dismiss().ByClickingBackground()
-            .TryShow();
-    }
+    [ObservableProperty] private SukiMessageBoxIcons _selectedMessageBoxIcon = SukiMessageBoxIcons.Information;
 
-    [RelayCommand]
-    private void OpenMultiOptionDialog()
-    {
-        dialogManager.CreateDialog()
-            .WithTitle("Multi Option Dialog")
-            .WithContent("Select any one of the below options:")
-            .WithActionButton("Option 1", _ => ShowOptionToast(1), true)
-            .WithActionButton("Option 2", _ => ShowOptionToast(2), true)
-            .WithActionButton("Option 3", _ => ShowOptionToast(3), true)
-            .TryShow();
-    }
+    public SukiMessageBoxButtons[] MessageBoxButtons { get; } = Enum.GetValues<SukiMessageBoxButtons>();
+
+    [ObservableProperty] private SukiMessageBoxButtons _selectedMessageBoxButtons = SukiMessageBoxButtons.YesNoCancel;
+    [ObservableProperty] private bool _useAlternativeHeaderStyle;
+    [ObservableProperty] private bool _showHeaderContentSeparator = true;
+    [ObservableProperty] private bool _useNativeWindow;
 
     private void ShowOptionToast(int option)
     {
@@ -72,26 +50,65 @@ public partial class DialogsViewModel(ISukiDialogManager dialogManager, ISukiToa
     }
 
     [RelayCommand]
-    private void OpenMessageBoxStyleDialog()
+    private void OpenDialogWindowDemo()
+        => new DialogWindowDemo(_dialogManager).Show();
+
+    [RelayCommand]
+    private void OpenDialogNativeWindowDemo()
     {
-        dialogManager.CreateDialog()
-            .OfType(SelectedType)
-            .WithTitle("MessageBox style dialog.")
-            .WithContent("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.")
-            .WithActionButton("Close " + SelectedType.ToString(), _ => { }, true, "Flat")
-            .Dismiss().ByClickingBackground()
-            .TryShow();
+        var dialogHost = new SukiDialogHost
+        {
+            Manager = new SukiDialogManager()
+        };
+        var toastHost = new SukiToastHost
+        {
+            Manager = new SukiToastManager()
+        };
+
+        var window = new Window
+        {
+            Title = "SukiUI in a stock Avalonia Window",
+            Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://SukiUI.Demo/Assets/OIG.N5o-removebg-preview.png"))),
+            Content = new SukiMainHost
+            {
+                Hosts = [dialogHost, toastHost],
+                Content = new DialogsViewModel(dialogHost.Manager, toastHost.Manager)
+            }
+        };
+
+        window.Show();
     }
 
     [RelayCommand]
-    private void OpenViewModelDialog()
+    private void OpenToolWindowDemo()
     {
-        dialogManager.CreateDialog()
-            .WithViewModel(dialog => new VmDialogViewModel(dialog))
-            .TryShow();
-    }
+        var sb = new StringBuilder();
 
-    [RelayCommand]
-    private void OpenDialogWindowDemo() => new DialogWindowDemo(dialogManager).Show();
-        
+        for (int i = 0; i < 100; i++)
+        {
+            sb.AppendLine(
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
+                "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. " +
+                "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. " +
+                "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
+                "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.");
+            sb.AppendLine();
+        }
+
+        var model = new ToolWindowModel
+        {
+            Header = "Testing a tool window dialog with auto size constrained to a max-size related to screen",
+            Message = sb.ToString(),
+            MaxHeightScreenRatio = 0.6,
+            MaxWidthScreenRatio = 0.6
+        };
+
+        var window = new ToolWindow
+        {
+            Title = "Tool Window Demo",
+            DataContext = model,
+        };
+
+        window.Show();
+    }
 }

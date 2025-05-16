@@ -1,29 +1,32 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using SukiUI.Enums;
-using Avalonia.Controls.Templates;
 using Avalonia.Data.Converters;
-using SukiUI.Theme;
 
 namespace SukiUI.Controls;
 
-public class SukiSideMenu : SelectingItemsControl
+public class SukiSideMenu : TreeView
 {
     public static readonly StyledProperty<string?> SearchTextProperty =
         AvaloniaProperty.Register<SukiSideMenu, string?>(nameof(SearchText));
 
     public static readonly StyledProperty<bool> IsSearchEnabledProperty =
         AvaloniaProperty.Register<SukiSideMenu, bool>(nameof(IsSearchEnabled), defaultValue: false);
+    
+    public static readonly StyledProperty<bool> IsContentVisibleProperty =
+        AvaloniaProperty.Register<SukiSideMenu, bool>(nameof(IsContentVisible), defaultValue: true);
 
-    public static readonly StyledProperty<bool> SidebarToggleEnabledProperty =
-        AvaloniaProperty.Register<SukiWindow, bool>(nameof(SidebarToggleEnabled), defaultValue: true);
+    public static readonly StyledProperty<bool> SidebarToggleEnabledProperty = AvaloniaProperty.Register<SukiSideMenu, bool>(nameof(SidebarToggleEnabled), defaultValue: true);
+    
+    public bool IsContentVisible
+    {
+        get => GetValue(IsContentVisibleProperty);
+        set => SetValue(IsContentVisibleProperty, value);
+    }
 
     public bool SidebarToggleEnabled
     {
@@ -42,7 +45,7 @@ public class SukiSideMenu : SelectingItemsControl
         get => GetValue(IsSearchEnabledProperty);
         set => SetValue(IsSearchEnabledProperty, value);
     }
-    
+
     public static readonly StyledProperty<bool> IsToggleButtonVisibleProperty =
         AvaloniaProperty.Register<SukiSideMenu, bool>(nameof(IsToggleButtonVisible), defaultValue: true);
 
@@ -51,7 +54,7 @@ public class SukiSideMenu : SelectingItemsControl
         get => GetValue(IsToggleButtonVisibleProperty);
         set => SetValue(IsToggleButtonVisibleProperty, value);
     }
-    
+
     public static readonly StyledProperty<bool> IsMenuExpandedProperty =
         AvaloniaProperty.Register<SukiSideMenu, bool>(nameof(IsMenuExpanded), defaultValue: true);
 
@@ -60,7 +63,7 @@ public class SukiSideMenu : SelectingItemsControl
         get => GetValue(IsMenuExpandedProperty);
         set => SetValue(IsMenuExpandedProperty, value);
     }
-    
+
     public static readonly StyledProperty<int> OpenPaneLengthProperty =
         AvaloniaProperty.Register<SukiSideMenu, int>(nameof(OpenPaneLength), defaultValue: 220);
 
@@ -73,7 +76,7 @@ public class SukiSideMenu : SelectingItemsControl
             _ => throw new ArgumentOutOfRangeException($"OpenPaneLength must be greater than or equal to 200, but was {value}")
         });
     }
-    
+
     public static readonly StyledProperty<HorizontalAlignment> TogglePaneButtonPositionProperty =
         AvaloniaProperty.Register<SukiSideMenu, HorizontalAlignment>(nameof(TogglePaneButtonPosition), defaultValue: HorizontalAlignment.Right);
 
@@ -134,7 +137,7 @@ public class SukiSideMenu : SelectingItemsControl
 
     private SukiTransitioningContentControl? _contentControl;
     private Grid? _spacer;
-    
+
     public SukiSideMenu()
     {
         SelectionMode = SelectionMode.Single | SelectionMode.AlwaysSelected;
@@ -143,7 +146,7 @@ public class SukiSideMenu : SelectingItemsControl
     private void MenuExpandedClicked()
     {
         IsMenuExpanded = !IsMenuExpanded;
-        
+
         UpdateMenuItemsExpansion();
     }
 
@@ -152,12 +155,12 @@ public class SukiSideMenu : SelectingItemsControl
         if(_sideMenuItems.Any())
             foreach (var item in _sideMenuItems)
                 item.IsTopMenuExpanded = IsMenuExpanded;
-        
+
         else if(Items.FirstOrDefault() is SukiSideMenuItem)
             foreach (SukiSideMenuItem? item in Items)
                 item!.IsTopMenuExpanded = IsMenuExpanded;
     }
-    
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
@@ -171,8 +174,8 @@ public class SukiSideMenu : SelectingItemsControl
         _contentControl = e.NameScope.Get<SukiTransitioningContentControl>("PART_TransitioningContentControl");
         _spacer = e.NameScope.Get<Grid>("PART_Spacer");
         if(_spacer != null) _spacer.IsVisible = IsSpacerVisible;
-        
-       
+
+
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
@@ -191,9 +194,9 @@ public class SukiSideMenu : SelectingItemsControl
             FilterItems(change.GetNewValue<string>());
         }
 
-        if (change.Property == SelectedItemProperty && _contentControl != null) 
+        if (change.Property == SelectedItemProperty && _contentControl != null)
             SetContentControlContent(change.NewValue);
-        if (change.Property == IsMenuExpandedProperty && _spacer != null) 
+        if (change.Property == IsMenuExpandedProperty && _spacer != null)
             _spacer.IsVisible = IsSpacerVisible;
     }
 
@@ -260,7 +263,7 @@ public class WindowBackgroundToCornerRadiusConverter : IValueConverter
 
         if((bool)value == false)
             return new CornerRadius(17);
-        
+
         return new CornerRadius(0);
     }
 
@@ -282,7 +285,7 @@ public class WindowBackgroundToMarginConverter : IValueConverter
 
         if((bool)value == false)
             return new Thickness(10,5,0,10);
-        
+
         return new Thickness(0);
     }
 
