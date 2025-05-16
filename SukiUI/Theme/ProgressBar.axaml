@@ -327,9 +327,4 @@
 	<ControlTheme x:Key="{x:Type ProgressBar}"
 	              BasedOn="{StaticResource SukiProgressBarStyle}"
 	              TargetType="ProgressBar" />
-
-	<Style Selector="suki|CircleProgressBar">
-		<Setter Property="ArcBackground" Value="{DynamicResource SukiLightBorderBrush}" />
-		<Setter Property="ArcForeground" Value="{DynamicResource SukiPrimaryColor}" />
-	</Style>
 </ResourceDictionary>
