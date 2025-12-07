@@ -4,9 +4,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:suki="clr-namespace:SukiUI.Controls"
+             xmlns:conv="clr-namespace:SukiUI.Converters"
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <conv:DoubleToThicknessConverter x:Key="DoubleToThicknessConverter" />
+    </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="suki|CircleProgressBar">
             <Setter Property="Template">
@@ -42,7 +46,7 @@
                                 </Transitions>
                             </Arc.Transitions>
                         </Arc>
-                        <ContentControl Margin="{TemplateBinding StrokeWidth}"
+                        <ContentControl Margin="{TemplateBinding StrokeWidth, Converter={StaticResource DoubleToThicknessConverter}}"
                                         HorizontalContentAlignment="Center"
                                         VerticalContentAlignment="Center"
                                         Content="{TemplateBinding Content}" />
