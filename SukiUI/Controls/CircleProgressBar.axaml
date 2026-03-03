@@ -22,6 +22,7 @@
                              Name="PART_ArcBackground"
                              Stretch="None"
                              Stroke="{TemplateBinding ArcBackground}"
+                             Opacity="{DynamicResource GlassOpacity}"
                              StrokeThickness="{TemplateBinding StrokeWidth}"
                              SweepAngle="360" />
                         <Arc Name="PART_ArcFill"
@@ -46,8 +47,7 @@
                                 </Transitions>
                             </Arc.Transitions>
                         </Arc>
-                        <ContentControl Margin="{TemplateBinding StrokeWidth, Converter={StaticResource DoubleToThicknessConverter}}"
-                                        HorizontalContentAlignment="Center"
+                        <ContentControl HorizontalContentAlignment="Center"
                                         VerticalContentAlignment="Center"
                                         Content="{TemplateBinding Content}" />
                     </Panel>

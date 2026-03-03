@@ -95,6 +95,15 @@
                                         </Transitions>
                                     </ContentControl.Transitions>
                                 </ContentControl>
+                                <Grid Name="PART_SideDisplay"
+                                      DockPanel.Dock="Right"
+                                      IsVisible="{Binding IsMenuExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type suki:SukiSideMenu}}}">
+                                    <ContentPresenter Name="PART_SideDisplayContent"
+                                                      Content="{Binding}"
+                                                      ContentTemplate="{TemplateBinding SideDisplayTemplate}"
+                                                      Margin="5,0"
+                                                      IsVisible="{Binding SideDisplayTemplate, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                </Grid>
                                 <Viewbox HorizontalAlignment="Left" StretchDirection="DownOnly">
                                     <TextBlock Name="PART_Header"
                                                Margin="15,0"
@@ -136,7 +145,7 @@
             </Style>
             <Style Selector="^ /template/ TextBlock#PART_Header">
                 <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
+                <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor120}" />
             </Style>
             <Style Selector="^[IsContentMovable=True]">
                 <Style Selector="^[IsTopMenuExpanded=True] /template/ Border#PART_Border">

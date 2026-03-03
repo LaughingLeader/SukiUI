@@ -225,19 +225,21 @@
                         </showMeTheXaml:XamlDisplay>
 
                         <showMeTheXaml:XamlDisplay UniqueId="TextBox2">
-                            <TextBox Text="" Watermark="Watermark" />
+                            <TextBox Text="" suki:TextBoxExtensions.ResetText="" Watermark="Watermark" />
                         </showMeTheXaml:XamlDisplay>
 
                         <showMeTheXaml:XamlDisplay UniqueId="TextBox3">
-                            <TextBox suki:TextBoxExtensions.Prefix="https://" />
+                            <TextBox suki:TextBoxExtensions.Prefix="{avalonia:MaterialIconExt Kind=Web}"
+                                     suki:TextBoxExtensions.ResetText="google"
+                                     suki:TextBoxExtensions.Unit=".com" />
                         </showMeTheXaml:XamlDisplay>
 
                         <showMeTheXaml:XamlDisplay UniqueId="TextBox4">
-                            <TextBox PasswordChar="*" />
+                            <TextBox Classes="revealPasswordButton" PasswordChar="*" />
                         </showMeTheXaml:XamlDisplay>
 
                         <showMeTheXaml:XamlDisplay UniqueId="TextBox5">
-                            <TextBox suki:TextBoxExtensions.AddDeleteButton="True" />
+                            <TextBox suki:TextBoxExtensions.ResetText="Reset to default" suki:TextBoxExtensions.AddDeleteButton="True" />
                         </showMeTheXaml:XamlDisplay>
 
                         <showMeTheXaml:XamlDisplay UniqueId="TextBox6">
@@ -245,9 +247,10 @@
                                             Margin="25"
                                             HorizontalAlignment="Center">
                                 <StackPanel Spacing="8">
-                                    <TextBox Text=""
+                                    <TextBox Text="Programming"
+                                             suki:TextBoxExtensions.ResetText="Programming"
                                              UseFloatingWatermark="True"
-                                             Watermark="Username" />
+                                             Watermark="Hobbies" />
                                 </StackPanel>
                             </suki:GlassCard>
                         </showMeTheXaml:XamlDisplay>
