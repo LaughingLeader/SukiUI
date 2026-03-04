@@ -114,7 +114,7 @@
 
                         <Popup Name="PART_Popup"
                                IsLightDismissEnabled="True"
-                               PlacementMode="Bottom"
+                               Placement="Bottom"
                                PlacementTarget="{TemplateBinding}"
                                WindowManagerAddShadowHint="False">
                             <DatePickerPresenter Name="PART_PickerPresenter" />
@@ -167,7 +167,7 @@
                                 <Style Selector="ListBoxItem:selected TextBlock">
                                     <Setter Property="FontWeight" Value="Bold" />
                                 </Style>
-                                <Style Selector="DateTimePickerPanel &gt; ListBoxItem">
+                                <Style Selector="DateTimePickerPanel > ListBoxItem">
                                     <Setter Property="Background" Value="Transparent" />
                                     <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
                                     <Setter Property="Padding" Value="4,2" />

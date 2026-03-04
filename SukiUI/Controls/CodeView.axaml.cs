@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data;
+using Avalonia.Input.Platform;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
@@ -75,21 +76,23 @@ public partial class CodeView : UserControl
 
         button.Click += async (sender, args) =>
         {
-            await TopLevel.GetTopLevel(((ClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime)
-                .MainWindow).Clipboard.SetTextAsync(Text);
-
-            Dispatcher.UIThread.Invoke(() =>
+            if(Application.Current?.ApplicationLifetime is ClassicDesktopStyleApplicationLifetime desktop && desktop.MainWindow != null && desktop.MainWindow.Clipboard != null)
             {
-                gridcontent.Children[0].IsVisible = false;
-                gridcontent.Children[1].IsVisible = true;
-            });
+                await desktop.MainWindow.Clipboard.SetTextAsync(Text);
 
-            await Task.Delay(3000);
-            Dispatcher.UIThread.Invoke(() =>
-            {
-                gridcontent.Children[0].IsVisible = true;
-                gridcontent.Children[1].IsVisible = false;
-            });
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    gridcontent.Children[0].IsVisible = false;
+                    gridcontent.Children[1].IsVisible = true;
+                });
+
+                await Task.Delay(3000);
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    gridcontent.Children[0].IsVisible = true;
+                    gridcontent.Children[1].IsVisible = false;
+                });
+            }
         };
 
         Grid.SetColumn(button, 1);
